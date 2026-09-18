@@ -133,6 +133,7 @@ function buildChartSvg(items, now = new Date(), granularity = 'monthly') {
   }).join('');
 
   const periodLabels = periods.map((period, index) => {
+    if (granularity === 'daily' && index % 5 !== 0 && index !== periods.length - 1) return '';
     const x = plot.left + index * periodWidth + periodWidth / 2;
     return `<text x="${x.toFixed(2)}" y="${baseline + 32}" fill="#57606a" font-size="13" text-anchor="middle">${escapeXml(period.label)}</text>`;
   }).join('');
