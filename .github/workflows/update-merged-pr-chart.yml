@@ -1,0 +1,48 @@
+name: Update merged PR chart
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 17 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  update-chart:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out profile
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Require analytics token
+        env:
+          GH_TOKEN: ${{ secrets.PR_ANALYTICS_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::Configure the PR_ANALYTICS_TOKEN secret with read access to private repositories."
+            exit 1
+          fi
+
+      - name: Generate chart
+        env:
+          GH_TOKEN: ${{ secrets.PR_ANALYTICS_TOKEN }}
+        run: node scripts/generate-merged-prs.js
+
+      - name: Commit updated chart
+        run: |
+          if git diff --quiet -- assets/merged-prs.svg; then
+            echo "Chart is unchanged."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/merged-prs.svg
+          git commit -m "chore: update merged PR chart"
+          git push
