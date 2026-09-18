@@ -1,0 +1,7 @@
+{
+  "name": "khanhmb-profile",
+  "private": true,
+  "scripts": {
+    "test": "node --test scripts/generate-merged-prs.test.js"
+  }
+}
