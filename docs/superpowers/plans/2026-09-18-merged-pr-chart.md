@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Generate and publish a GitHub profile SVG showing `khanhmb`'s merged PR count by day over the last 12 months, including private repositories.
+**Goal:** Generate and publish three GitHub profile SVGs showing `khanhmb`'s merged PR count by day, week, and month, including private repositories.
 
-**Architecture:** A Node.js script calls GitHub GraphQL with `GH_TOKEN`, aggregates merged PR timestamps into UTC-day buckets, and writes a self-contained SVG. A scheduled GitHub Actions workflow runs the script and commits the generated asset; the profile README embeds that asset.
+**Architecture:** A Node.js script calls GitHub GraphQL with `GH_TOKEN`, aggregates merged PR timestamps into daily buckets, rolls them up into 30 daily, 12 weekly, and 12 monthly periods, and writes three self-contained SVGs. A GitHub Actions workflow runs every five minutes and commits changed generated assets; the profile README embeds all three assets.
 
 **Tech Stack:** Node.js built-in `fetch`, GitHub GraphQL API, GitHub Actions, inline SVG.
 
@@ -94,20 +94,22 @@
 
 **Files:**
 - Create: `README.md`
-- Create: `assets/merged-prs.svg`
+- Create: `assets/merged-prs-daily.svg`
+- Create: `assets/merged-prs-weekly.svg`
+- Create: `assets/merged-prs-monthly.svg`
 
 - [ ] **Step 1: Generate an initial chart**
 
-  Run the generator with `GH_TOKEN` and write `assets/merged-prs.svg`. If the token is unavailable locally, use an explicit empty fixture only for the initial shape; the first workflow run must replace it with authenticated data.
+  Run the generator with `GH_TOKEN` and write all three SVGs. If the token is unavailable locally, use an explicit empty fixture only for the initial shape; the first workflow run must replace them with authenticated data.
 
 - [ ] **Step 2: Write the README**
 
-  Add a short profile introduction and embed `assets/merged-prs.svg` with an accessible alt label. State that the chart counts merged PRs by UTC day and refreshes daily.
+  Add a short profile introduction and embed the daily, weekly, and monthly SVGs with accessible alt labels. State that the charts count merged PRs by UTC period and refresh every five minutes when scheduled runs are available.
 
 - [ ] **Step 3: Verify the artifact**
 
-  Run: `npm test && rg -n "merged-prs\.svg|merged PR" README.md && test -s assets/merged-prs.svg`
-  Expected: all tests pass, README contains the image reference, and the SVG is non-empty.
+  Run: `npm test && rg -n "merged-prs-(daily|weekly|monthly)\.svg|merged PR" README.md && test -s assets/merged-prs-daily.svg && test -s assets/merged-prs-weekly.svg && test -s assets/merged-prs-monthly.svg`
+  Expected: all tests pass, README contains all three image references, and each SVG is non-empty.
 
 - [ ] **Step 4: Commit**
 
