@@ -46,7 +46,7 @@
   }
   ```
 
-  `buildSvg` must render a 12-month window ending at `--now`, include a `<title>` with the total, use green bars, and escape all text before inserting it into SVG markup.
+  `buildSvg` must render a 12-month window ending at `--now`, include a `<title>` with the total, use GitHub-blue bars, and escape all text before inserting it into SVG markup.
 
 - [ ] **Step 4: Add the test command and run it**
 

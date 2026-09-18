@@ -10,7 +10,7 @@ Show the GitHub account's merged pull requests in the profile README as a single
 - A GitHub Actions workflow runs daily and can also be started manually.
 - The workflow queries GitHub's GraphQL API for pull requests authored by `khanhmb` with a merged timestamp, using a repository secret token with read access to private repositories.
 - A small Node.js generator aggregates merged PRs by UTC day and writes a self-contained SVG to `assets/merged-prs.svg`.
-- The SVG includes the total merged count, a 12-month time axis, monthly labels, and one green bar per day. Empty days remain visible as zero-height positions so the timeline keeps a consistent scale.
+- The SVG includes the total merged count, a 12-month time axis, monthly labels, and one GitHub-blue bar per day. Empty days remain visible as zero-height positions so the timeline keeps a consistent scale.
 - `README.md` embeds the SVG and explains the update cadence. No token or private repository names are written to the generated asset.
 
 ## Data and failure behavior
